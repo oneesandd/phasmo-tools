@@ -43,8 +43,8 @@
     let ocrRunning = false; // Control variable to manage OCR execution
     let ocrTimeout; // Variable to store the OCR timeout
     let foundObjective = false; // Variable to track if at least one objective is found
-    const targetPixelX = 318; // Replace with your target pixel X coordinate
-    const targetPixelY = 289; // Replace with your target pixel Y coordinate
+    const targetPixelX = 1160; // Replace with your target pixel X coordinate
+    const targetPixelY = 240; // Replace with your target pixel Y coordinate
     const targetRGB = { r: 42, g: 19, b: 16 }; // Replace with your target RGB coloR
 
     async function startScreenCapture() {
