@@ -40,9 +40,6 @@
 
     let video; // Global variable for the video element
     let stream; // Global variable for the media stream
-    let ocrRunning = false; // Control variable to manage OCR execution
-    let ocrTimeout; // Variable to store the OCR timeout
-    let foundObjective = false; // Variable to track if at least one objective is found
     const targetPixelX = 1160; // Replace with your target pixel X coordinate
     const targetPixelY = 240; // Replace with your target pixel Y coordinate
     const targetRGB = { r: 255, g: 255, b: 255 }; // Replace with your target RGB coloR
@@ -136,42 +133,22 @@
         return isColorMatch;
     }
 
-    async function startOCR(canvasFull) {
-        ocrRunning = true; // Set the control variable to true
-
-        while (ocrRunning) {
-            await processFrame(canvasFull);
-            await new Promise(resolve => setTimeout(resolve, 100)); // Throttle processing, adjust delay as needed
-            stopOCR();
-        }
-        // stopOCR();
+    async function runOCR(canvasFull) {
+        await processFrame(canvasFull);
+        await new Promise(resolve => setTimeout(resolve, 100)); // Throttle processing, adjust delay as needed
     }
 
-    function stopOCR() {
-        ocrRunning = false; // Set the control variable to false
-        ocrTimeout = setTimeout(() => {
-            foundObjective = false;
-        }, 10000);
-    }
-
-        async function logTesseract() {
+    async function logTesseract() {
         const canvasFull = document.getElementById('canvas-full');
         await startScreenCapture();  // Start capturing the screen once
 
         // Check the pixel color periodically
         const pixelCheckInterval = setInterval(async () => {
             if (await checkVideoPixelColor()) {
-                await startOCR(canvasFull); // Start OCR if the color matches
+                await runOCR(canvasFull); // Start OCR if the color matches
                 // Do not clear the interval here to continue checking for pixel color
             }
         }, 1000); // Check every second
-
-        // Ensure OCR stops if time runs out
-        setTimeout(() => {
-            stopOCR(); // Stop OCR after 10 seconds if not triggered
-            // You may choose to stop the pixel check here if desired
-            // clearInterval(pixelCheckInterval); 
-        }, 10000);
     }
 
     async function processFrame(canvasFull) {
@@ -199,13 +176,7 @@
             if (containsIgnoreCase(objectives, key)) {
                 console.log(keywordMap[key]);
                 textObjectives.innerHTML += `${keywordMap[key]} <br>`;
-                foundObjective = true; // Set to true if an objective is found
             }
-        }
-
-        // Stop OCR if at least one objective is found
-        if (foundObjective) {
-            stopOCR(); // Stop the OCR but keep checking pixel color
         }
     }
 
@@ -228,7 +199,6 @@
 <div class="container">
     <h1>Objectives</h1>
     <button on:click={logTesseract}>Log Tesseract</button>
-    <button on:click={stopOCR}>Stop OCR</button> <!-- Button to stop the OCR -->
 </div>
 
 <canvas id="canvas-full"></canvas>
