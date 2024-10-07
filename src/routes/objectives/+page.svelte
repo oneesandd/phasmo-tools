@@ -139,20 +139,19 @@
     async function startOCR(canvasFull) {
         ocrRunning = true; // Set the control variable to true
 
-        // Set a timeout to stop the OCR after 10 seconds
-        ocrTimeout = setTimeout(() => {
-            stopOCR();
-        }, 10000);
-
         while (ocrRunning) {
             await processFrame(canvasFull);
             await new Promise(resolve => setTimeout(resolve, 100)); // Throttle processing, adjust delay as needed
+            stopOCR();
         }
+        // stopOCR();
     }
 
     function stopOCR() {
         ocrRunning = false; // Set the control variable to false
-        clearTimeout(ocrTimeout); // Clear the timeout if OCR is stopped
+        ocrTimeout = setTimeout(() => {
+            foundObjective = false;
+        }, 10000);
     }
 
         async function logTesseract() {
