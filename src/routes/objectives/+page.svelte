@@ -133,11 +133,6 @@
         return isColorMatch;
     }
 
-    async function runOCR(canvasFull) {
-        await processFrame(canvasFull);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Throttle processing, adjust delay as needed
-    }
-
     async function logTesseract() {
         const canvasFull = document.getElementById('canvas-full');
         await startScreenCapture();  // Start capturing the screen once
@@ -145,8 +140,7 @@
         // Check the pixel color periodically
         const pixelCheckInterval = setInterval(async () => {
             if (await checkVideoPixelColor()) {
-                await runOCR(canvasFull); // Start OCR if the color matches
-                // Do not clear the interval here to continue checking for pixel color
+                await processFrame(canvasFull);
             }
         }, 100); // Check every second
     }
@@ -156,7 +150,7 @@
 
         const canvasObjectives = document.getElementById('canvas-objectives');
         cropCanvas(canvasObjectives, canvasFull, 400, 670, 500, 300);
-        const objectives = await recognize(canvasObjectives);
+        //const objectives = await recognize(canvasObjectives);
 
         const keywordMap = {
             "cru": "Crucifix",
