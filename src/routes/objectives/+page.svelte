@@ -189,6 +189,7 @@
             // "fire": "Firelight",
             "emf": "EMF Reader",
             "parabolic": "Parabolic Microphone",
+            "parobolic": "Parabolic Microphone",
             // "photo": "Ghost Photo"
         };
 
