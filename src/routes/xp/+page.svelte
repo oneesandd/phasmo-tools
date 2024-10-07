@@ -146,12 +146,12 @@
 
     <p class="result">{matchesRequired} matches</p>
     <p class="result">
-        {timeFormatted.dDays} days {timeFormatted.dHours} hours {timeFormatted.dMinutes} minutes
+        {timeFormatted.dDays} days {timeFormatted.dHours} hours {timeFormatted.dMinutes} minutes investigating
     </p>
     <p class="result">
-        {timeFormatted.hHours} hours {timeFormatted.hMinutes} minutes
+        {timeFormatted.hHours} hours {timeFormatted.hMinutes} minutes investigating
     </p>
     <p class="result">
-        {timeFormatted.mMinutes} minutes
+        {timeFormatted.mMinutes} minutes investigating
     </p>
 </div>
