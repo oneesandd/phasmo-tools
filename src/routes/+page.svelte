@@ -1,2 +1,2 @@
-<h1>Phasmophobia Tools</h1>
+<h1>Phasmo Tools</h1>
 <p>A set of tools for easing phasmophobia calculations.</p>
