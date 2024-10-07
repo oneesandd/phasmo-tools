@@ -136,13 +136,21 @@
     async function logTesseract() {
         const canvasFull = document.getElementById('canvas-full');
         await startScreenCapture();  // Start capturing the screen once
-
+    
+        let isProcessing = false;  // Flag to track cooldown state
+    
         // Check the pixel color periodically
         const pixelCheckInterval = setInterval(async () => {
-            if (await checkVideoPixelColor()) {
+            if (!isProcessing && await checkVideoPixelColor()) {
+                isProcessing = true;  // Set flag to indicate processing is happening
                 await processFrame(canvasFull);
+    
+                // Wait 10 seconds before allowing another frame to be processed
+                setTimeout(() => {
+                    isProcessing = false;  // Reset the flag after cooldown
+                }, 10000);  // 10 seconds = 10000 milliseconds
             }
-        }, 100); // Check every second
+        }, 100); // Check every 100ms
     }
 
     async function processFrame(canvasFull) {
@@ -150,7 +158,7 @@
 
         const canvasObjectives = document.getElementById('canvas-objectives');
         cropCanvas(canvasObjectives, canvasFull, 400, 670, 500, 300);
-        //const objectives = await recognize(canvasObjectives);
+        const objectives = await recognize(canvasObjectives);
 
         const keywordMap = {
             "cru": "Crucifix",
@@ -163,15 +171,15 @@
             // "photo": "Ghost Photo"
         };
 
-        //const textObjectives = document.getElementById('objectives');
-        //textObjectives.innerHTML = ''; // Clear previous results
+        const textObjectives = document.getElementById('objectives');
+        textObjectives.innerHTML = ''; // Clear previous results
 
-        //for (const key in keywordMap) {
-            //if (containsIgnoreCase(objectives, key)) {
-                //console.log(keywordMap[key]);
-                //textObjectives.innerHTML += `${keywordMap[key]} <br>`;
-            //}
-        //}
+        for (const key in keywordMap) {
+            if (containsIgnoreCase(objectives, key)) {
+                console.log(keywordMap[key]);
+                textObjectives.innerHTML += `${keywordMap[key]} <br>`;
+            }
+        }
     }
 
     function startCapture(displayMediaOptions) {
