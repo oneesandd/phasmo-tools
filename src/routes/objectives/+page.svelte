@@ -6,7 +6,7 @@
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
 
-        const threshold = 60; // You can adjust this threshold
+        const threshold = 128; // You can adjust this threshold
 
         for (let i = 0; i < data.length; i += 4) {
             const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;  // Average RGB values
