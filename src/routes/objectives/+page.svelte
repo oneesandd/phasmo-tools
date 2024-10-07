@@ -146,7 +146,7 @@
 
         while (ocrRunning) {
             await processFrame(canvasFull);
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Throttle processing, adjust delay as needed
+            await new Promise(resolve => setTimeout(resolve, 100)); // Throttle processing, adjust delay as needed
         }
     }
 
