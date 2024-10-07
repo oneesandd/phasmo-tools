@@ -45,7 +45,7 @@
     let foundObjective = false; // Variable to track if at least one objective is found
     const targetPixelX = 1160; // Replace with your target pixel X coordinate
     const targetPixelY = 240; // Replace with your target pixel Y coordinate
-    const targetRGB = { r: 42, g: 19, b: 16 }; // Replace with your target RGB coloR
+    const targetRGB = { r: 255, g: 255, b: 255 }; // Replace with your target RGB coloR
 
     async function startScreenCapture() {
         try {
@@ -121,7 +121,7 @@
         const pixel = imageData.data;
 
         // Calculate the allowable range for each RGB component
-        const tolerance = 0.25; // 1%
+        const tolerance = 0.01; // 1%
         const allowableR = targetRGB.r * tolerance;
         const allowableG = targetRGB.g * tolerance;
         const allowableB = targetRGB.b * tolerance;
