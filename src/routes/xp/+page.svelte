@@ -3,7 +3,7 @@
     let currentLevel = 1;
     let desiredLevel = 1;
     let meanXPPerMatch = 3700;
-    let timePerMatch = 2; // Time in minutes
+    let timePerMatch = 2.75; // Time in minutes
     let matchesRequired = 0;
     let totalTimeRequired = 0; // Time in minutes
 
