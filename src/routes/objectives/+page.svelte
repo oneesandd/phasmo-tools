@@ -135,7 +135,7 @@
 
     async function runOCR(canvasFull) {
         await processFrame(canvasFull);
-        await new Promise(resolve => setTimeout(resolve, 100)); // Throttle processing, adjust delay as needed
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Throttle processing, adjust delay as needed
     }
 
     async function logTesseract() {
@@ -148,7 +148,7 @@
                 await runOCR(canvasFull); // Start OCR if the color matches
                 // Do not clear the interval here to continue checking for pixel color
             }
-        }, 1000); // Check every second
+        }, 100); // Check every second
     }
 
     async function processFrame(canvasFull) {
