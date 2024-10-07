@@ -163,15 +163,15 @@
             // "photo": "Ghost Photo"
         };
 
-        const textObjectives = document.getElementById('objectives');
-        textObjectives.innerHTML = ''; // Clear previous results
+        //const textObjectives = document.getElementById('objectives');
+        //textObjectives.innerHTML = ''; // Clear previous results
 
-        for (const key in keywordMap) {
-            if (containsIgnoreCase(objectives, key)) {
-                console.log(keywordMap[key]);
-                textObjectives.innerHTML += `${keywordMap[key]} <br>`;
-            }
-        }
+        //for (const key in keywordMap) {
+            //if (containsIgnoreCase(objectives, key)) {
+                //console.log(keywordMap[key]);
+                //textObjectives.innerHTML += `${keywordMap[key]} <br>`;
+            //}
+        //}
     }
 
     function startCapture(displayMediaOptions) {
