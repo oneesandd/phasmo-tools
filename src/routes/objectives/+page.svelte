@@ -129,7 +129,7 @@
             (pixel[1] >= targetRGB.g - allowableG && pixel[1] <= targetRGB.g + allowableG) &&
             (pixel[2] >= targetRGB.b - allowableB && pixel[2] <= targetRGB.b + allowableB);
 
-        console.log(pixel); // Log the pixel data for debugging
+        //console.log(pixel); // Log the pixel data for debugging
         return isColorMatch;
     }
 
