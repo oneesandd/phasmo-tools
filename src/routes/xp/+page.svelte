@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+    import { createWorker } from 'tesseract.js';
+    import Tesseract from 'tesseract.js';
+
     let currentXP = 0;
     let currentLevel = 1;
     let desiredLevel = 1;
@@ -41,6 +44,84 @@
         const mMinutes = Math.floor(requiredMinutes);
 
         return { dDays, dHours, dMinutes, hHours, hMinutes, mMinutes };
+    }
+
+    async function logTesseract() {
+
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Load the image
+        const img = new Image();
+        img.src = 'image.png';  // Replace with the correct image path
+
+        // Set the canvas size when the image is loaded
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            // Draw the image on the canvas
+            ctx.drawImage(img, 0, 0);
+
+            // Apply a threshold filter
+            applyThresholdFilter(ctx, canvas.width, canvas.height);
+
+            const croppedCanvas = cropImage(canvas, 1360, 370, 180, 40);
+            // Draw the cropped image back onto the original canvas (or a new one)
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas first
+            ctx.drawImage(croppedCanvas, 0, 0); // Draw the cropped image on the canvas
+        };
+
+        const applyThresholdFilter = (ctx, width, height) => {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+
+            const threshold = 128; // You can adjust this threshold
+
+            for (let i = 0; i < data.length; i += 4) {
+                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;  // Average RGB values
+                const value = avg >= threshold ? 255 : 0;  // Apply threshold
+
+                // Set new pixel values (black or white)
+                data[i] = data[i + 1] = data[i + 2] = value;  // RGB channels
+                // Alpha (transparency) remains unchanged (data[i+3])
+            }
+
+            // Update the canvas with the threshold image
+            ctx.putImageData(imageData, 0, 0);
+        };
+
+        const cropImage = (canvas, x, y, width, height) => {
+            const croppedCanvas = document.createElement('canvas');
+            const croppedCtx = croppedCanvas.getContext('2d');
+
+            // Set the size of the new canvas to the crop size
+            croppedCanvas.width = width;
+            croppedCanvas.height = height;
+
+            // Get the cropped image data from the original canvas
+            const imageData = canvas.getContext('2d').getImageData(x, y, width, height);
+
+            // Draw the cropped image data onto the new canvas
+            croppedCtx.putImageData(imageData, 0, 0);
+
+            return croppedCanvas;  // Return the new canvas with the cropped image
+        };
+
+        const worker = await createWorker('eng', 1,{
+            logger: m => console.log(m),
+        });
+        (async () => {
+          await worker.setParameters({
+              tessedit_pageseg_mode: Tesseract.PSM.SINGLE_TEXT,
+              // user_defined_dpi: '70',
+              tessedit_char_whitelist: '0123456789',
+          });
+          const { data } = await worker.recognize(canvas,
+              // { rectangle }
+          );
+          console.log(data.text);
+          await worker.terminate();
+        })();
     }
 
     $: matchesRequired = calculateMatches(currentXP, currentLevel, desiredLevel, meanXPPerMatch);
@@ -154,4 +235,6 @@
     <p class="result">
         {timeFormatted.mMinutes} minutes investigating
     </p>
+    <button on:click={logTesseract}>Log Tesseract</button>
 </div>
+<canvas id="myCanvas"></canvas>
